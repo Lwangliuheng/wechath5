@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no, email=no">
+    <title>我为保险代言</title>
+   <!--  <link rel="shortcut icon" href="./img/img2.png" type="image/x-icon"/>   -->
+    <link rel="stylesheet" href="./css/style.css" />
+    <!--custom style-->
+    <style>
+
+        .current .title {
+            -webkit-animation: slideToTop .8s ease both;
+        }
+
+        .current .subtitle {
+            -webkit-animation: slideToTop .8s 0.3s ease both;
+        }
+        .page:first-child {
+            position: relative;
+            background: url('./img/img1.png') no-repeat;
+            background-size: 100vw 100vh;
+        }
+        .sec1 .p {
+            position: absolute;
+            top: 12vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #ac022c;
+            text-align: center;
+            font-weight: bold;
+        }
+        .sec1 .p input {
+            position: relative;
+            width: 80px;
+            font-size: 20px;
+            color: #ac022c;
+            border: none;
+            background: rgba(0, 0, 0, 0);
+            text-align: center;
+        }
+        .sec1 .p span {
+            display: block;
+            width: 80px;
+            height: 2px;
+            position: absolute;
+            left: 40px;
+            background: #ac022c;
+
+        }
+        .sec1 #qwe {
+            position: absolute;
+            top: 50vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 22px;
+            width: 30vw;
+            height: 6vh;
+            text-align: center;
+            line-height: 6vh;
+            background: #ac022c;
+            color: #fff;
+            border-radius: 10px;
+        }
+        .sec1 #abc {
+            position: absolute;
+            top: 58vh;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #ac022c;
+        }
+        .page:nth-child(2){
+            background: url('./img/img2.png') no-repeat;
+            background-size: 100vw 100vh;
+        }
+        .page:nth-child(3){
+            background: url('./img/img3.png') no-repeat;
+            background-size: 100vw 100vh;
+        }
+        .page:nth-child(4) {
+            background: url('./img/img4.png') no-repeat;
+            background-size: 100vw 100vh;
+        }
+        .page:nth-child(5) {
+            background: url('./img/img5.png') no-repeat;
+            background-size: 100vw 100vh;
+        }
+        .page:nth-child(6) {
+            background: url('./img/img.png') no-repeat;
+            background-size: 100vw 100vh;
+        }
+        .page_word_liu{
+              position: absolute;
+              top:12vh;
+              left:0px;
+              width:83%;
+              
+              color:#0660ab;
+              margin-left:6%;
+              background-size: 33px auto;
+              
+             /* padding-left:20px;*/
+              padding-top: 25px;
+
+              padding-bottom: 25px;
+             
+        }
+        .page_word_liu p{
+              font-weight:550;
+              line-height: 33px;
+              font-size: 21px;
+        }
+      .page_word_liu p span{
+               color:red;
+               text-decoration:underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrap">
+        <div class="page sec1">
+            <p class="p">
+              我是
+              <span></span>
+              <input id="input" type="text">
+            </p>
+            <div id="qwe">我要代言</div>
+            <p id='abc'>已有0人代言</p>
+            <div class="arrow"></div>
+        </div>
+        <div class="page">
+            <div class="arrow"></div>
+        </div>
+        <div class="page">
+            <div class="arrow"></div>
+        </div>
+        <div class="page">
+            <div class="arrow"></div>
+        </div>
+        <div class="page">
+            <div class="arrow"></div>
+            
+        </div>
+        <div class="page">
+            <div class="page_word_liu">
+             <p>我是***，第***位保险代言人</p>
+             <p>我为保险代言，我为保险点赞</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/zepto.min.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="./js/PageSlider.js"></script>
+    <script>
+      $(function(){
+          var qweStatus = true;
+          var p = new PageSlider({
+              pages: $('.page-wrap .page')
+          });
+          var num = '';
+          var name = '';
+          console.log(p);
+          function verification(){
+               $.ajax({  
+                  type : "get",  
+                  url : "http://172.16.1.200:8080/getTicket?url=https://survey.zhongchebaolian.com/wechath5/index.html",  
+                  success : function(data){  
+                      console.log(data);
+                      wx.config({
+                          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                          appId: 'wxca5679c037bc5262', // 必填，公众号的唯一标识
+                          timestamp: data.timestamp, // 必填，生成签名的时间戳
+                          nonceStr: data.nonceStr, // 必填，生成签名的随机串
+                          signature: data.signature,// 必填，签名
+                          jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo',
+                                        'onMenuShareQZone'] // 必填，需要使用的JS接口列表
+                      });
+
+                  },  
+                  error:function(error){
+                     console.log(error)
+                     alert("error")
+                  }  
+               });
+          };
+          
+          wx.error(function(res){
+             //verification();
+          });
+           wx.ready(function(){
+             console.log("进入分享")
+             //分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: '我为保险代言', // 分享标题
+                    link: 'https://survey.zhongchebaolian.com/wechath5/index.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: 'https://survey.zhongchebaolian.com/wechath5/img/logo.png', // 分享图标
+                    success: function () {
+                      console.log("分享到朋友圈")
+                    // 用户点击了分享后执行的回调函数
+                    }
+                });
+                //分享给朋友
+                wx.onMenuShareAppMessage({
+                        title: '我为保险代言', // 分享标题
+                        desc: '分享朋友圈，传递接力棒', // 分享描述
+                        link: 'https://survey.zhongchebaolian.com/wechath5/index.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        imgUrl: 'https://survey.zhongchebaolian.com/wechath5/img/logo.png', // 分享图标
+                        type: '', // 分享类型,music、video或link，不填默认为link
+                        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                        success: function () {
+                          console.log("分享给朋友")
+                        // 用户点击了分享后执行的回调函数
+                        }
+                });
+                //分享到QQ
+                wx.onMenuShareQQ({
+                        title: '我为保险代言', // 分享标题
+                        desc: '分享朋友圈，传递接力棒', // 分享描述
+                        link: 'https://survey.zhongchebaolian.com/wechath5/index.html', // 分享链接
+                        imgUrl: 'https://survey.zhongchebaolian.com/wechath5/img/logo.png', // 分享图标
+                        success: function () {
+                           console.log("分享到QQ")
+                        // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                         // 用户取消分享后执行的回调函数
+                        }
+                  });
+              //分享到腾讯微博
+              wx.onMenuShareWeibo({
+                      title: '我为保险代言', // 分享标题
+                      desc: '分享朋友圈，传递接力棒', // 分享描述
+                      link: 'https://survey.zhongchebaolian.com/wechath5/index.html', // 分享链接
+                      imgUrl: 'https://survey.zhongchebaolian.com/wechath5/img/logo.png', // 分享图标
+                      success: function () {
+                        console.log("分享到腾讯微博")
+                      // 用户确认分享后执行的回调函数
+                      },
+                      cancel: function () {
+                      // 用户取消分享后执行的回调函数
+                      }
+                });
+              //分享到QQ空间
+              wx.onMenuShareQZone({
+                      title: '我为保险代言', // 分享标题
+                      desc: '分享朋友圈，传递接力棒', // 分享描述
+                      link: 'https://survey.zhongchebaolian.com/wechath5/index.html', // 分享链接
+                      imgUrl: 'https://survey.zhongchebaolian.com/wechath5/img/logo.png', // 分享图标
+                      success: function () {
+                        console.log("分享到QQ空间")
+                      // 用户确认分享后执行的回调函数
+                      },
+                      cancel: function () {
+                      // 用户取消分享后执行的回调函数
+                      }
+                });
+          });
+          // 加载数量
+          $.ajax({
+              url: 'https://mock.zhongchebaolian.com/api-service/a/c',
+              type: 'get',
+              success: function (res) {
+                
+                  console.log(res);
+                  num = res.counts;
+                  // $('#abc').innerHTML(res.counts);
+                  document.getElementById('abc').innerHTML = `已有${res.counts}代言`;
+                  var str = '<p>我是***，第***位保险代言人</p><p>我为保险代言，我为保险点赞</p>'
+                  $('.page_word_liu').html(str);
+                  verification();
+              },
+              fail: function (error) {
+                console.log(error);
+               
+              }
+          });
+          // 点击提交
+          $('#qwe').on('touchend', function () {
+             
+              if(!$('#input').val()){
+                  $('#input').attr("placeholder","您的姓名");
+                  document.getElementById('input').focus();
+                  return false;
+              }
+              if(qweStatus){
+                  $.ajax({
+                      url: 'https://mock.zhongchebaolian.com/api-service/a/s',
+                      type: 'post',
+                      data: {
+                          name: $('#input').val()
+                      },
+                      success: function (res) {
+
+                          console.log(res);
+                          alert('提交成功！');
+                          qweStatus  = false;
+                          var str = '<p>我是'+$('#input').val()+'，第'+num+'位保险代言人</p><p>我为保险代言，我为保险点赞</p>'
+                          $('.page_word_liu').html(str);
+                          p.moveTo(1);
+                          //window.location.reload();
+                      },
+                      fail: function () {
+
+                      }
+                  })
+              }else{
+                p.moveTo(1);
+              }
+              
+          });
+      });
+        
+    </script>
+</body>
+
+</html>
